@@ -1,4 +1,5 @@
 import "./styles.css";
+import {useState} from "react";
 
 type TextExpanderProps = {
     collapsedNumWords?: number;
@@ -13,7 +14,7 @@ type TextExpanderProps = {
 export default function App() {
     return (
         <div>
-            <TextExpander>
+            <TextExpander className='box'>
                 Space travel is the ultimate adventure! Imagine soaring past the stars
                 and exploring new worlds. It's the stuff of dreams and science fiction,
                 but believe it or not, space travel is a real thing. Humans and robots
@@ -26,6 +27,7 @@ export default function App() {
                 expandButtonText="Show text"
                 collapseButtonText="Collapse text"
                 buttonColor="#ff6622"
+                className='box'
             >
                 Space travel requires some seriously amazing technology and
                 collaboration between countries, private companies, and international
@@ -46,14 +48,30 @@ export default function App() {
 
 function TextExpander(
     {
-        collapsedNumWords,
-        expandButtonText,
-        collapseButtonText,
+        collapsedNumWords = 30,
+        expandButtonText = 'Show Less',
+        collapseButtonText = 'Show More',
         buttonColor,
         expanded,
         className,
         children,
     }: TextExpanderProps
 ) {
-    return <div>TODO</div>;
+    const [isExpanded, setIsExpanded] = useState(expanded ?? false)
+
+    const buttonStyling = {
+        color: buttonColor ?? 'blue',
+        textDecoration: 'underline'
+    }
+
+    return <div className={className}>
+        <p>{typeof children === "string" ?
+            <p>{isExpanded ? children : children?.slice(0, collapsedNumWords)}</p> : children}</p>
+        <p
+            className='text-button'
+            onClick={e => setIsExpanded(!isExpanded)}
+            style={buttonStyling}
+        >{isExpanded ? expandButtonText : collapseButtonText}</p>
+    </div>;
 }
+
